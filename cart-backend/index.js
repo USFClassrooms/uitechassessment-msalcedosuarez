@@ -7,8 +7,6 @@
 
 const express = require("express");
 const app = express(); // creates an express application
-
-// Serve the static files from the React app
 app.use(express.json()); // this will make the app parse json body sent in the POST request
 
 const cartList = [
@@ -52,7 +50,6 @@ const cartList = [
 /* Get HTTP Requests */
 app.get("/list", (req, res) => {
   res.send(cartList);
-  console.log("Sent list of items");
 });
 
 /* POST HTTP Requests */

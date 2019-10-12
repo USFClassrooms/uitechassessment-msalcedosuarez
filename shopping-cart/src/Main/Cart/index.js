@@ -1,49 +1,43 @@
 import React, { Component } from "react";
+import { Card } from "react-bootstrap";
 
-//send a GET /list request and
-//show the data in a tabular format (not json).
 class Cart extends Component {
-  // Initialize the state
-  constructor(props) {
-    super(props);
-    this.state = {
-      list: []
-    };
-  }
-
-  // Fetch the list on first mount
+  state = {
+    items: []
+  };
   componentDidMount() {
-    this.getList();
-  }
-
-  // Retrieves the list of items from the Express app
-  getList = () => {
     fetch("/list")
       .then(res => res.json())
-      .then(list => this.setState({ list }));
-    console.log("Receive Items");
-  };
+      .then(data => {
+        this.setState({ items: data });
+        console.log(this.state.items);
+      })
+      .catch(console.log);
+  }
 
   render() {
-    const { list } = this.state;
-
     return (
-      <div>
-        <h1>List of Items</h1>
-        {/* Check to see if any items are found*/}
-        {list.length ? (
-          <div>
-            {/* Render the list of items */}
-            {list.map(item => {
-              return <div>{item}</div>;
-            })}
-          </div>
-        ) : (
-          <div>
-            <h2>No List Items Found</h2>
-          </div>
-        )}
-      </div>
+      <Card border="info">
+        <Card.Header>Cart List:</Card.Header>
+        <div className="col-xs-15">
+          {this.state.items.map(item => (
+            <div className="card">
+              <div className="card-body">
+                <h5 className="card-title">{item.name}</h5>
+                <h6 className="card-subtitle mb-2 text-muted">
+                  {<span>Description: {item.description}</span>}
+                </h6>
+                <h6 className="card-subtitle mb-2 text-muted">
+                  {<span>Price: ${item.price}</span>}
+                </h6>
+                <h6 className="card-subtitle mb-2 text-muted">
+                  {<span>Quantity: {item.amount}</span>}
+                </h6>
+              </div>
+            </div>
+          ))}
+        </div>
+      </Card>
     );
   }
 }
